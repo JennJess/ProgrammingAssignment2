@@ -1,22 +1,16 @@
-## Put comments here that give an overall description of what your
-## functions do
+## The first function makeCacheMatrix, creates a function that is capable of taking a 
+## matrix as input, and returning a list of functions: set matrix, get matrix,
+## set the inverse of the input matrix and getting the inverse. 
+## this then is used as the input "inverse" matrix for cacheSolve
 
-## Write a short comment describing this function
 
 
 makeCacheMatrix <- function(x = matrix()) {
-        ## @x: a square invertible matrix
-        ## return: a list containing functions to
-        ##              1. set the matrix
-        ##              2. get the matrix
-        ##              3. set the inverse
-        ##              4. get the inverse
-        ##         this list is used as the input to cacheSolve()
+
         
         inv = NULL
         set = function(y) {
-                # use `<<-` to assign a value to an object in an environment 
-                # different from the current environment. 
+                
                 x <<- y
                 inv <<- NULL
         }
@@ -26,26 +20,27 @@ makeCacheMatrix <- function(x = matrix()) {
         list(set=set, get=get, setinv=setinv, getinv=getinv)
 }
 
-## Write a short comment describing this function
+## cachesolve takes as input the inverse matrix from makeCacheMatrix
+## it looks to set if the inverse has been already calculated, ie. from makeCacheMatrix.
+## if so, it returns the values of the inverse matrix along with a message
+## if not, it calculates the inverse and set the value of the inverse matrix 
+## using setinv, storing it in the cache
 
 cacheSolve <- function(x, ...) {
-        ## @x: output of makeCacheMatrix()
-        ## return: inverse of the original matrix input to makeCacheMatrix()
+       inv = x$getinv()
         
-        inv = x$getinv()
-        
-        # if the inverse has already been calculated
+       
         if (!is.null(inv)){
-                # get it from the cache and skips the computation. 
+               
                 message("getting cached data")
                 return(inv)
         }
         
-        # otherwise, calculates the inverse 
+       
         mat.data = x$get()
         inv = solve(mat.data, ...)
         
-        # sets the value of the inverse in the cache via the setinv function.
+        
         x$setinv(inv)
         
         return(inv)
